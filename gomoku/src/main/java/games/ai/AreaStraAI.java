@@ -9,7 +9,7 @@ import java.util.Random;
  * Created by wangdehao on 18/1/16.
  */
 public class AreaStraAI extends AI{
-
+    // vs. simpleAI: set shrinkSize, get win rate
     // 1 - 75.0%
     // 2 - 90.0%
     // 3 - 97.5%
