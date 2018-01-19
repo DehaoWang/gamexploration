@@ -51,8 +51,8 @@ public class Lv2StrategyMoveAI extends AI{
             
             // evaluation
             int score = evaluateGameForPlayer(game.getBoard(), movePlayer);
-            System.out.println("possibleMove="+possibleMove.toString());
-            System.out.println("score="+score);
+//            System.out.println("possibleMove="+possibleMove.toString());
+//            System.out.println("score="+score);
             if(score > bestScore){
                 bestScore = score;
                 bestMove = possibleMove;

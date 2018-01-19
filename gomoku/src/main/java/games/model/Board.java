@@ -5,7 +5,8 @@ package games.model;
  */
 public class Board {
 //    private final String emptyLocation = "+  ";
-    private final int height = 1;
+    private final int HEIGHT = 1;
+    private final int WIDTH = 3;
     private Space[][] board;
     private int boardSize;
     private int cntOfWin;
@@ -40,11 +41,16 @@ public class Board {
 
     public void printBoard(){
         System.out.println("==========================\nPrinting Current Board\n==========================");
+        for(int k = -1; k < boardSize; k++){
+            System.out.print(String.format("%-3s", k));
+        }
+        System.out.println();
         for(int i = 0; i < boardSize; i++){
+            System.out.print(String.format("%-3s", i));
             for(int j = 0; j < boardSize; j++){
-                System.out.print(board[i][j].getFiller()+" ");
+                System.out.print(board[i][j].getFiller());
             }
-            for(int k = 0; k < height; k++){
+            for(int k = 0; k < HEIGHT; k++){
                 System.out.println();
             }
         }
