@@ -4,17 +4,18 @@ package games.model;
  * Created by wangdehao on 18/1/16.
  */
 public class Board {
-    private final String emptyLocation = "+  ";
+//    private final String emptyLocation = "+  ";
     private final int height = 1;
-    private String[][] board;
+    private Space[][] board;
     private int boardSize;
     private int cntOfWin;
     private Location winnerLocation;
     private boolean printInfo = true;
+    private Space space;
 
     public boolean putPiece(int x, int y, String movePlayerName, int roundNum){
-        if(board[x][y].equals(emptyLocation)){
-            board[x][y] = String.format("%-3s",movePlayerName + roundNum);
+        if(board[x][y].isAvailable()){
+            board[x][y].setFiller(String.format("%-3s",movePlayerName + roundNum));
             return true;
         }
         else {
@@ -28,11 +29,11 @@ public class Board {
     public void init(int boardSize, int cntOfWin, boolean printInfo) {
         this.printInfo = printInfo;
         this.boardSize = boardSize;
-        board = new String[boardSize][boardSize];
+        board = new Space[boardSize][boardSize];
         this.cntOfWin = cntOfWin;
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
-                board[i][j] = emptyLocation;
+                board[i][j] = new Space();
             }
         }
     }
@@ -41,7 +42,7 @@ public class Board {
         System.out.println("==========================\nPrinting Current Board\n==========================");
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
-                System.out.print(board[i][j]+" ");
+                System.out.print(board[i][j].getFiller()+" ");
             }
             for(int k = 0; k < height; k++){
                 System.out.println();
@@ -57,7 +58,8 @@ public class Board {
         return winnerLocation;
     }
 
-    public boolean validateDegree45(Player p) {
+    public int validateDegree45(Player p) {
+        int maxCombo = 0;
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
                 if(i * j > 0){
@@ -65,7 +67,7 @@ public class Board {
                 }
                 int cnt = 0;
                 for(int k = 0; k < boardSize-i-j; k++){
-                    if(board[i+k][j+k].charAt(0) == p.getName().charAt(0)){
+                    if(board[i+k][j+k].getFiller().charAt(0) == p.getName().charAt(0)){
                         cnt++;
                     }
                     else {
@@ -73,20 +75,23 @@ public class Board {
                     }
                     if(cnt == cntOfWin){
                         winnerLocation = new Location(i+k, j+k);
-                        return true;
+                    }
+                    if(cnt > maxCombo){
+                        maxCombo = cnt;
                     }
                 }
             }
         }
-        return false;
+        return maxCombo;
     }
 
-    public boolean validateDegree135(Player p) {
+    public int validateDegree135(Player p) {
+        int maxCombo = 0;
         // j = 0
         for(int i = 0; i < boardSize; i++){
             int cnt = 0;
             for(int k = 0; k <= i; k++){
-                if(board[i-k][k].charAt(0) == p.getName().charAt(0)){
+                if(board[i-k][k].getFiller().charAt(0) == p.getName().charAt(0)){
                     cnt++;
                 }
                 else {
@@ -94,7 +99,9 @@ public class Board {
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(i-k, k);
-                    return true;
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
                 }
             }
         }
@@ -102,7 +109,7 @@ public class Board {
         for(int j = 0; j < boardSize; j++){
             int cnt = 0;
             for(int k = 0; k < boardSize-j; k++){
-                if(board[boardSize-1-k][j+k].charAt(0) == p.getName().charAt(0)){
+                if(board[boardSize-1-k][j+k].getFiller().charAt(0) == p.getName().charAt(0)){
                     cnt++;
                 }
                 else {
@@ -110,46 +117,62 @@ public class Board {
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(boardSize-1-k, j+k);
-                    return true;
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
                 }
             }
         }
-        return false;
+        return maxCombo;
     }
 
-    public boolean validateDegree0(Player p){
+    public int validateDegree0(Player p){
+        int maxCombo = 0;
         for(int i = 0; i < boardSize; i++){
             int cnt = 0;
             for(int j = 0; j < boardSize; j++){
-                if(board[i][j].charAt(0) == p.getName().charAt(0)){
+                if(board[i][j].getFiller().charAt(0) == p.getName().charAt(0)){
                     cnt++;
                 }else {
                     cnt = 0;
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(i, j);
-                    return true;
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
                 }
             }
         }
-        return false;
+        return maxCombo;
     }
 
-    public boolean validateDegree90(Player p){
+    public int validateDegree90(Player p){
+        int maxCombo = 0;
         for(int j = 0; j < boardSize; j++){
             int cnt = 0;
             for(int i = 0; i < boardSize; i++){
-                if(board[i][j].charAt(0) == p.getName().charAt(0)){
+                if(board[i][j].getFiller().charAt(0) == p.getName().charAt(0)){
                     cnt++;
                 }else {
                     cnt = 0;
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(i, j);
-                    return true;
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
                 }
             }
         }
-        return false;
+        return maxCombo;
+    }
+
+    public Space getSpace(int i, int j){
+        return board[i][j];
+    }
+
+    public void setSpace(int i, int j, Space space) {
+        board[i][j] = space;
     }
 }

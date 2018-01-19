@@ -30,4 +30,8 @@ public class Player {
     public AI getAi() {
         return ai;
     }
+
+    public void setAI(AI ai) {
+        this.ai = ai;
+    }
 }

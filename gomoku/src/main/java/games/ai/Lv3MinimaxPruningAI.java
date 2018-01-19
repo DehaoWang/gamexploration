@@ -1,18 +1,16 @@
 package games.ai;
 
-
 import games.model.Game;
 import games.model.Location;
 import games.model.Player;
 
 /**
- * Created by wangdehao on 18/1/16.
+ * Created by wangdehao on 18/1/19.
  */
-public class AI {
-    public int playId = 0;
-    public int sleepTime = 500;
+public class Lv3MinimaxPruningAI extends AI{
 
+    @Override
     public Location getLocationBasedOnBoard(Game game, Player movePlayer) throws InterruptedException {
-        return new Location(0,0);
+        return super.getLocationBasedOnBoard(game, movePlayer);
     }
 }

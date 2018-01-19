@@ -15,6 +15,7 @@ public class Game {
     private boolean onGoing = true;
     private Player winnerPlayer = null;
     private boolean printInfo = true;
+    private int cntOfWin = 0;
 
     public Game(Player player0, Player player1, int boardSize, int cntOfWin, boolean printInfo) {
         this.player0 = player0;
@@ -23,14 +24,15 @@ public class Game {
         board = new Board();
         board.init(boardSize, cntOfWin, printInfo);
         this.printInfo = printInfo;
+        this.cntOfWin = cntOfWin;
     }
+
 
     public void roundStep(Location location){
         boolean successPut = board.putPiece(location.getX(), location.getY(), movePlayer.getName(), roundNum);
         if(!successPut){
             return;
         }
-        // TODO: 18/1/16 problem
         if(stepNum % 2 == 0){
             roundNum++;
         }
@@ -74,16 +76,16 @@ public class Game {
     }
 
     public boolean validate(Player p) {
-        if(board.validateDegree0(p)){
+        if(board.validateDegree0(p) >= cntOfWin){
             return true;
         }
-        if(board.validateDegree45(p)){
+        if(board.validateDegree45(p) >= cntOfWin){
             return true;
         }
-        if(board.validateDegree90(p)){
+        if(board.validateDegree90(p) >= cntOfWin){
             return true;
         }
-        if(board.validateDegree135(p)){
+        if(board.validateDegree135(p) >= cntOfWin){
             return true;
         }
         return false;
@@ -103,5 +105,21 @@ public class Game {
 
     public Player getWinnerPlayer() {
         return winnerPlayer;
+    }
+
+    public Player getPlayer0() {
+        return player0;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public void makeMove(Location location, Player player){
+        board.putPiece(location.getX(), location.getY(), player.getName(), 0);
+    }
+
+    public void resetMove(Location location) {
+        board.setSpace(location.getX(), location.getY(), new Space());
     }
 }

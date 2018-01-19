@@ -1,28 +1,31 @@
 package games.ai;
 
-import games.model.Board;
+import games.model.Game;
 import games.model.Location;
+import games.model.Player;
 
 import java.util.Random;
 
 /**
  * Created by wangdehao on 18/1/16.
  */
-public class AreaStraAI extends AI{
-    // vs. simpleAI: set shrinkSize, get win rate
+public class Lv1RandomMoveAI extends AI{
+    // set shrinkSize, get win rate
     // 1 - 75.0%
     // 2 - 90.0%
     // 3 - 97.5%
     // 4 - 99.5%
-    int shrinkStart = 2;
+    int shrinkStart = 0;
 
-    public AreaStraAI(int sleepTime) {
+    public Lv1RandomMoveAI(int sleepTime, int shrinkStart) {
         this.sleepTime = sleepTime;
+        this.shrinkStart = shrinkStart;
     }
 
     @Override
-    public Location getLocationBasedOnBoard(Board board) throws InterruptedException {
-        int boardSize = board.getBoardSize();
+    public Location getLocationBasedOnBoard(Game game, Player movePlayer) throws InterruptedException {
+
+        int boardSize = game.getBoard().getBoardSize();
 
         int sizeAfterShrink = boardSize-2*shrinkStart;
 
@@ -30,6 +33,6 @@ public class AreaStraAI extends AI{
         int x = shrinkStart + Math.abs(random.nextInt()) % sizeAfterShrink;
         int y = shrinkStart + Math.abs(random.nextInt()) % sizeAfterShrink;
         Thread.sleep(sleepTime);
-        return new Location(x+","+y);
+        return new Location(x,y);
     }
 }

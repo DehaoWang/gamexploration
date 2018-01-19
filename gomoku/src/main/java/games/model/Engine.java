@@ -18,7 +18,7 @@ public class Engine {
         while(gomokuGame.isOnGoing()){
             Player movePlayer = gomokuGame.getMovePlayer();
             if(movePlayer.hasAi()){
-                location = movePlayer.getAi().getLocationBasedOnBoard(gomokuGame.getBoard());
+                location = movePlayer.getAi().getLocationBasedOnBoard(gomokuGame, movePlayer);
             }
             else {
                 System.out.println("please input the piece location for player: "+movePlayer.getName());
