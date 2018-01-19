@@ -16,15 +16,18 @@ import java.util.Map;
 public class Lv2StrategyMoveAI extends AI{
     private double aggressiveRate = 0.0;
 
-    private static final Map<Integer, Integer> combo2Value;
+    private final int NUM_OF_DIRECTIONS = 4;
+    private final int ONE_MOVE = 1;
+
+    private static final Map<Integer, Integer> COMBO_2_VALUE;
     static {
-        combo2Value = new HashMap<Integer, Integer>();
-        combo2Value.put(0, 0);
-        combo2Value.put(1, 1);
-        combo2Value.put(2, 10);
-        combo2Value.put(3, 100);
-        combo2Value.put(4, 1000);
-        combo2Value.put(5, 10000);
+        COMBO_2_VALUE = new HashMap<Integer, Integer>();
+        COMBO_2_VALUE.put(0, 0);
+        COMBO_2_VALUE.put(1, 1);
+        COMBO_2_VALUE.put(2, 10);
+        COMBO_2_VALUE.put(3, 100);
+        COMBO_2_VALUE.put(4, 1000);
+        COMBO_2_VALUE.put(5, 10000);
     }
 
     public Lv2StrategyMoveAI(int sleepTime, int playId, int aggressiveRate) {
@@ -43,10 +46,9 @@ public class Lv2StrategyMoveAI extends AI{
         int center = (game.getBoard().getBoardSize() - 1) / 2;
         System.out.println("center="+center);
         Location bestMove = new Location(center,center);
-        int bestScore = 4;
+        int bestScore = COMBO_2_VALUE.get(ONE_MOVE) * NUM_OF_DIRECTIONS;
         for(Location possibleMove: possibleMoves){
             // move
-            
             game.makeMove(possibleMove, movePlayer);
             
             // evaluation
@@ -59,7 +61,6 @@ public class Lv2StrategyMoveAI extends AI{
             }
             
             // reset
-            
             game.resetMove(possibleMove);
         }
         System.out.println("bestMove:"+bestMove.toString());
@@ -78,10 +79,10 @@ public class Lv2StrategyMoveAI extends AI{
         int maxP135 = board.validateDegree135(player);
 
         int total =
-                combo2Value.get(maxP0)+
-                combo2Value.get(maxP45)+
-                combo2Value.get(maxP90)+
-                combo2Value.get(maxP135);
+                COMBO_2_VALUE.get(maxP0)+
+                COMBO_2_VALUE.get(maxP45)+
+                COMBO_2_VALUE.get(maxP90)+
+                COMBO_2_VALUE.get(maxP135);
 
         return total;
     }
