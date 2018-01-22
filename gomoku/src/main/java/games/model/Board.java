@@ -1,5 +1,8 @@
 package games.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by wangdehao on 18/1/16.
  */
@@ -64,7 +67,7 @@ public class Board {
         return winnerLocation;
     }
 
-    public int validateDegree45(Player p) {
+    public int validateDegree45(Player player) {
         int maxCombo = 0;
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
@@ -73,7 +76,7 @@ public class Board {
                 }
                 int cnt = 0;
                 for(int k = 0; k < boardSize-i-j; k++){
-                    if(board[i+k][j+k].getFiller().charAt(0) == p.getName().charAt(0)){
+                    if(board[i+k][j+k].getFiller().charAt(0) == player.getName().charAt(0)){
                         cnt++;
                     }
                     else {
@@ -91,13 +94,13 @@ public class Board {
         return maxCombo;
     }
 
-    public int validateDegree135(Player p) {
+    public int validateDegree135(Player player) {
         int maxCombo = 0;
         // j = 0
         for(int i = 0; i < boardSize; i++){
             int cnt = 0;
             for(int k = 0; k <= i; k++){
-                if(board[i-k][k].getFiller().charAt(0) == p.getName().charAt(0)){
+                if(board[i-k][k].getFiller().charAt(0) == player.getName().charAt(0)){
                     cnt++;
                 }
                 else {
@@ -115,7 +118,7 @@ public class Board {
         for(int j = 0; j < boardSize; j++){
             int cnt = 0;
             for(int k = 0; k < boardSize-j; k++){
-                if(board[boardSize-1-k][j+k].getFiller().charAt(0) == p.getName().charAt(0)){
+                if(board[boardSize-1-k][j+k].getFiller().charAt(0) == player.getName().charAt(0)){
                     cnt++;
                 }
                 else {
@@ -132,12 +135,12 @@ public class Board {
         return maxCombo;
     }
 
-    public int validateDegree0(Player p){
+    public int validateDegree0(Player player){
         int maxCombo = 0;
         for(int i = 0; i < boardSize; i++){
             int cnt = 0;
             for(int j = 0; j < boardSize; j++){
-                if(board[i][j].getFiller().charAt(0) == p.getName().charAt(0)){
+                if(board[i][j].getFiller().charAt(0) == player.getName().charAt(0)){
                     cnt++;
                 }else {
                     cnt = 0;
@@ -153,12 +156,12 @@ public class Board {
         return maxCombo;
     }
 
-    public int validateDegree90(Player p){
+    public int validateDegree90(Player player){
         int maxCombo = 0;
         for(int j = 0; j < boardSize; j++){
             int cnt = 0;
             for(int i = 0; i < boardSize; i++){
-                if(board[i][j].getFiller().charAt(0) == p.getName().charAt(0)){
+                if(board[i][j].getFiller().charAt(0) == player.getName().charAt(0)){
                     cnt++;
                 }else {
                     cnt = 0;
@@ -180,5 +183,161 @@ public class Board {
 
     public void setSpace(int i, int j, Space space) {
         board[i][j] = space;
+    }
+
+
+    public Map<Integer,Integer> validateDegree0v2(Player player) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        int maxCombo = 0;
+        boolean writeMapFlag = false;
+        for(int i = 0; i < boardSize; i++){
+            int cnt = 0;
+            for(int j = 0; j < boardSize; j++){
+                if(board[i][j].getFiller().charAt(0) == player.getName().charAt(0)){
+                    writeMapFlag = true;
+                    cnt++;
+                }else if(writeMapFlag){
+                    increaseMapByKey(map, cnt);
+                    cnt = 0;
+                    writeMapFlag = false;
+                }
+                if(cnt == cntOfWin){
+                    winnerLocation = new Location(i, j);
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
+                }
+            }
+        }
+
+        return map;
+    }
+
+
+    public Map<Integer,Integer> validateDegree45v2(Player player) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        int maxCombo = 0;
+        boolean writeMapFlag = false;
+        for(int i = 0; i < boardSize; i++){
+            for(int j = 0; j < boardSize; j++){
+                if(i * j > 0){
+                    continue;
+                }
+                int cnt = 0;
+                for(int k = 0; k < boardSize-i-j; k++){
+                    if(board[i+k][j+k].getFiller().charAt(0) == player.getName().charAt(0)){
+                        writeMapFlag = true;
+                        cnt++;
+                    }
+                    else if(writeMapFlag){
+                        increaseMapByKey(map, cnt);
+                        cnt = 0;
+                        writeMapFlag = false;
+                    }
+                    if(cnt == cntOfWin){
+                        winnerLocation = new Location(i+k, j+k);
+                    }
+                    if(cnt > maxCombo){
+                        maxCombo = cnt;
+                    }
+                }
+            }
+        }
+
+        return map;
+    }
+
+    public Map<Integer,Integer> validateDegree90v2(Player player) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        int maxCombo = 0;
+        boolean writeMapFlag = false;
+        for(int j = 0; j < boardSize; j++){
+            int cnt = 0;
+            for(int i = 0; i < boardSize; i++){
+                if(board[i][j].getFiller().charAt(0) == player.getName().charAt(0)){
+                    writeMapFlag = true;
+                    cnt++;
+                }else if(writeMapFlag){
+                    increaseMapByKey(map, cnt);
+                    cnt = 0;
+                    writeMapFlag = false;
+                }
+                if(cnt == cntOfWin){
+                    winnerLocation = new Location(i, j);
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
+                }
+            }
+        }
+
+        return map;
+    }
+
+    public Map<Integer,Integer> validateDegree135v2(Player player) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        int maxCombo = 0;
+        // j = 0
+        boolean writeMapFlag = false;
+        for(int i = 0; i < boardSize; i++){
+            int cnt = 0;
+            for(int k = 0; k <= i; k++){
+                if(board[i-k][k].getFiller().charAt(0) == player.getName().charAt(0)){
+                    writeMapFlag = true;
+                    cnt++;
+                }
+                else if(writeMapFlag){
+                    increaseMapByKey(map, cnt);
+                    cnt = 0;
+                    writeMapFlag = false;
+                }
+                if(cnt == cntOfWin){
+                    winnerLocation = new Location(i-k, k);
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
+                }
+            }
+        }
+
+        writeMapFlag = false;
+        // i = boardSize-1
+        for(int j = 0; j < boardSize; j++){
+            int cnt = 0;
+            for(int k = 0; k < boardSize-j; k++){
+                if(board[boardSize-1-k][j+k].getFiller().charAt(0) == player.getName().charAt(0)){
+                    writeMapFlag = true;
+                    cnt++;
+                }
+                else if(writeMapFlag) {
+                    increaseMapByKey(map, cnt);
+                    cnt = 0;
+                    writeMapFlag = false;
+                }
+                if(cnt == cntOfWin){
+                    winnerLocation = new Location(boardSize-1-k, j+k);
+                }
+                if(cnt > maxCombo){
+                    maxCombo = cnt;
+                }
+            }
+        }
+
+        return map;
+    }
+
+
+    private void increaseMapByKey(Map<Integer, Integer> map, int cnt) {
+        Integer count = map.get(cnt);
+        if(count == null){
+            map.put(cnt, 1);
+        }
+        else {
+            map.put(cnt, count + 1);
+        }
     }
 }

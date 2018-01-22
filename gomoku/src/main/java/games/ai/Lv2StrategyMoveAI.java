@@ -51,9 +51,9 @@ public class Lv2StrategyMoveAI extends AI{
             game.makeMove(possibleMove, movePlayer);
             
             // evaluation
-            int selfScore = evaluateGameForPlayer(game.getBoard(), movePlayer);
+            int selfScore = evaluateGameForPlayerV2(game.getBoard(), movePlayer);
 //            System.out.println("possibleMove="+possibleMove.toString());
-//            System.out.println("score="+score);
+            System.out.println("score="+selfScore);
 
             // maximize oneself:    generate possible moves, select one that maximizes oneself
             if(selfScore > bestScore){
@@ -91,6 +91,31 @@ public class Lv2StrategyMoveAI extends AI{
         return total;
     }
 
+    public int evaluateGameForPlayerV2(Board board, Player player){
+        // max
+        Map<Integer, Integer> mapA0 = board.validateDegree0v2(player);
+        Map<Integer, Integer> mapA45 = board.validateDegree45v2(player);
+        Map<Integer, Integer> mapA90 = board.validateDegree90v2(player);
+        Map<Integer, Integer> mapA135 = board.validateDegree135v2(player);
+
+        int total =
+                calScoreByMap(mapA0)
+                +calScoreByMap(mapA45)
+                +calScoreByMap(mapA90)
+                +calScoreByMap(mapA135);
+
+        return total;
+    }
+
+    public int calScoreByMap(Map<Integer, Integer> map){
+        int total = 0;
+        for(Integer key: map.keySet()){
+            int val = map.get(key);
+            total += val * COMBO_2_VALUE.get(key);
+        }
+        return total;
+    }
+
     public List<Location> moveGenerator(Board board){
         List<Location> possibleMoves = new ArrayList<Location>();
 
@@ -101,7 +126,6 @@ public class Lv2StrategyMoveAI extends AI{
                 }
             }
         }
-
         return possibleMoves;
     }
 }
