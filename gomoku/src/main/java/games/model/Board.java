@@ -7,7 +7,6 @@ import java.util.Map;
  * Created by wangdehao on 18/1/16.
  */
 public class Board {
-//    private final String emptyLocation = "+  ";
     private final int HEIGHT = 1;
     private final int WIDTH = 3;
     private Space[][] board;
@@ -15,7 +14,6 @@ public class Board {
     private int cntOfWin;
     private Location winnerLocation;
     private boolean printInfo = true;
-    private Space space;
 
     public boolean putPiece(int x, int y, String movePlayerName, int roundNum){
         if(board[x][y].isAvailable()){
@@ -186,21 +184,33 @@ public class Board {
     }
 
 
-    public Map<Integer,Integer> validateDegree0v2(Player player) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    public Map<String, Integer> validateDegree0v2(Player player) {
+        Map<String, Integer> map = new HashMap<>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
+
+        boolean beforeEmpty = false;
+        boolean afterEmpty = false;
+
         for(int i = 0; i < boardSize; i++){
             int cnt = 0;
             for(int j = 0; j < boardSize; j++){
                 if(board[i][j].getFiller().charAt(0) == player.getName().charAt(0)){
                     writeMapFlag = true;
                     cnt++;
+                    if(j > 0 && board[i][j-1].isAvailable()){
+                        beforeEmpty = true;
+                    }
                 }else if(writeMapFlag){
-                    increaseMapByKey(map, cnt);
+                    if(board[i][j].isAvailable()){
+                        afterEmpty = true;
+                    }
+                    increaseMapByKey(map, cnt, beforeEmpty, afterEmpty);
                     cnt = 0;
                     writeMapFlag = false;
+                    beforeEmpty = false;
+                    afterEmpty = false;
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(i, j);
@@ -215,11 +225,15 @@ public class Board {
     }
 
 
-    public Map<Integer,Integer> validateDegree45v2(Player player) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    public Map<String,Integer> validateDegree45v2(Player player) {
+        Map<String, Integer> map = new HashMap<>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
+
+        boolean beforeEmpty = false;
+        boolean afterEmpty = false;
+
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
                 if(i * j > 0){
@@ -230,11 +244,19 @@ public class Board {
                     if(board[i+k][j+k].getFiller().charAt(0) == player.getName().charAt(0)){
                         writeMapFlag = true;
                         cnt++;
+                        if(i+k > 0 && j+k > 0 && board[i+k-1][j+k-1].isAvailable()){
+                            beforeEmpty = true;
+                        }
                     }
                     else if(writeMapFlag){
-                        increaseMapByKey(map, cnt);
+                        if(board[i+k][j+k].isAvailable()){
+                            afterEmpty = true;
+                        }
+                        increaseMapByKey(map, cnt, beforeEmpty, afterEmpty);
                         cnt = 0;
                         writeMapFlag = false;
+                        beforeEmpty = false;
+                        afterEmpty = false;
                     }
                     if(cnt == cntOfWin){
                         winnerLocation = new Location(i+k, j+k);
@@ -249,21 +271,33 @@ public class Board {
         return map;
     }
 
-    public Map<Integer,Integer> validateDegree90v2(Player player) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    public Map<String,Integer> validateDegree90v2(Player player) {
+        Map<String, Integer> map = new HashMap<>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
+
+        boolean beforeEmpty = false;
+        boolean afterEmpty = false;
+
         for(int j = 0; j < boardSize; j++){
             int cnt = 0;
             for(int i = 0; i < boardSize; i++){
                 if(board[i][j].getFiller().charAt(0) == player.getName().charAt(0)){
                     writeMapFlag = true;
                     cnt++;
+                    if(i > 0 && board[i-1][j].isAvailable()){
+                        beforeEmpty = true;
+                    }
                 }else if(writeMapFlag){
-                    increaseMapByKey(map, cnt);
+                    if(board[i][j].isAvailable()){
+                        afterEmpty = true;
+                    }
+                    increaseMapByKey(map, cnt, beforeEmpty, afterEmpty);
                     cnt = 0;
                     writeMapFlag = false;
+                    beforeEmpty = false;
+                    afterEmpty = false;
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(i, j);
@@ -277,23 +311,35 @@ public class Board {
         return map;
     }
 
-    public Map<Integer,Integer> validateDegree135v2(Player player) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    public Map<String,Integer> validateDegree135v2(Player player) {
+        Map<String, Integer> map = new HashMap<>();
 
         int maxCombo = 0;
-        // j = 0
         boolean writeMapFlag = false;
+
+        boolean beforeEmpty = false;
+        boolean afterEmpty = false;
+
+        // j = 0
         for(int i = 0; i < boardSize-1; i++){
             int cnt = 0;
             for(int k = 0; k <= i; k++){
                 if(board[i-k][k].getFiller().charAt(0) == player.getName().charAt(0)){
                     writeMapFlag = true;
                     cnt++;
+                    if(i-k > 0 && k > 0 && board[i-k+1][k-1].isAvailable()){
+                        beforeEmpty = true;
+                    }
                 }
                 else if(writeMapFlag){
-                    increaseMapByKey(map, cnt);
+                    if(board[i-k][k].isAvailable()){
+                        afterEmpty = true;
+                    }
+                    increaseMapByKey(map, cnt, beforeEmpty, afterEmpty);
                     cnt = 0;
                     writeMapFlag = false;
+                    beforeEmpty = false;
+                    afterEmpty = false;
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(i-k, k);
@@ -302,6 +348,7 @@ public class Board {
                     maxCombo = cnt;
                 }
             }
+            increaseMapByKey(map, cnt, beforeEmpty, afterEmpty);
         }
 
         writeMapFlag = false;
@@ -312,11 +359,21 @@ public class Board {
                 if(board[boardSize-1-k][j+k].getFiller().charAt(0) == player.getName().charAt(0)){
                     writeMapFlag = true;
                     cnt++;
+                    //// TODO: 18/1/22
+                    System.out.println("j="+j+";k="+k);
+                    if(k > 0 && j+k > 0 && board[boardSize-1-(k-1)][j+k-1].isAvailable()){
+                        beforeEmpty = true;
+                    }
                 }
                 else if(writeMapFlag) {
-                    increaseMapByKey(map, cnt);
+                    if(board[boardSize-1-k][j+k].isAvailable()){
+                        afterEmpty = true;
+                    }
+                    increaseMapByKey(map, cnt, beforeEmpty, afterEmpty);
                     cnt = 0;
                     writeMapFlag = false;
+                    beforeEmpty = false;
+                    afterEmpty = false;
                 }
                 if(cnt == cntOfWin){
                     winnerLocation = new Location(boardSize-1-k, j+k);
@@ -331,13 +388,22 @@ public class Board {
     }
 
 
-    private void increaseMapByKey(Map<Integer, Integer> map, int cnt) {
-        Integer count = map.get(cnt);
+    private void increaseMapByKey(Map<String, Integer> map, int cnt, boolean beforeEmpty, boolean afterEmpty) {
+        String postFix = "";
+        if(beforeEmpty && afterEmpty){
+            postFix += "C";
+        }else if(!beforeEmpty && !afterEmpty){
+            postFix += "A";
+        }else {
+            postFix += "B";
+        }
+        String key = cnt+postFix;
+        Integer count = map.get(key);
         if(count == null){
-            map.put(cnt, 1);
+            map.put(key, 1);
         }
         else {
-            map.put(cnt, count + 1);
+            map.put(key, count + 1);
         }
     }
 }

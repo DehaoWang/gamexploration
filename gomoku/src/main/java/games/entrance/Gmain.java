@@ -13,7 +13,6 @@ public class Gmain {
 
     public static void main(String[] args) throws InterruptedException {
         Config config = new Config();
-//        config.setSleepTimeForSingleStep(500);
 
         AI aiA = new Lv1RandomMoveAI(config.getSleepTimeForSingleStep(), 0);
         Player playerA = new Player("A");
@@ -22,9 +21,12 @@ public class Gmain {
         AI aiB = new Lv1RandomMoveAI(config.getSleepTimeForSingleStep(), 2);
         Player playerB = new Player("B", aiB);
 
-        AI aiC = new Lv2StrategyMoveAI(config.getSleepTimeForSingleStep(), 1, 1);
+        AI aiC = new Lv2StrategyMoveAI(config.getSleepTimeForSingleStep(), 1, 0.5, 1);
         Player playerC = new Player("C", aiC);
 
-        Series.playSeries(playerA, playerC, config);
+        AI aiD = new Lv2StrategyMoveAI(config.getSleepTimeForSingleStep(), 1, 0.5, 2);
+        Player playerD = new Player("D", aiD);
+
+        Series.playSeries(playerC, playerD, config);
     }
 }
