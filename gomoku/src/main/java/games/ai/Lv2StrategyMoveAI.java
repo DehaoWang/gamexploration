@@ -41,7 +41,6 @@ public class Lv2StrategyMoveAI extends AI{
         // TODO: 18/1/19 player? 
 //        evaluateGameForPlayer(game, movePlayer);
 
-        // maximize oneself:    generate possible moves, select one that maximizes oneself
         List<Location> possibleMoves = moveGenerator(game.getBoard());
         int center = (game.getBoard().getBoardSize() - 1) / 2;
         System.out.println("center="+center);
@@ -52,27 +51,32 @@ public class Lv2StrategyMoveAI extends AI{
             game.makeMove(possibleMove, movePlayer);
             
             // evaluation
-            int score = evaluateGameForPlayer(game.getBoard(), movePlayer);
+            int selfScore = evaluateGameForPlayer(game.getBoard(), movePlayer);
 //            System.out.println("possibleMove="+possibleMove.toString());
 //            System.out.println("score="+score);
-            if(score > bestScore){
-                bestScore = score;
+
+            // maximize oneself:    generate possible moves, select one that maximizes oneself
+            if(selfScore > bestScore){
+                bestScore = selfScore;
                 bestMove = possibleMove;
             }
-            
+
+            // minimize opponent:   generate possible moves, select one that minimizes opponent
+//            int oppoScore = evaluateGameForPlayer(game.getBoard(), )
+
             // reset
             game.resetMove(possibleMove);
         }
         System.out.println("bestMove:"+bestMove.toString());
 
         // TODO: 18/1/19  
-        // minimize opponent:   generate possible moves, select one that minimizes opponent
 
         return bestMove;
     }
 
 
     public int evaluateGameForPlayer(Board board, Player player){
+        // max
         int maxP0 = board.validateDegree0(player);
         int maxP45 = board.validateDegree45(player);
         int maxP90 = board.validateDegree90(player);
