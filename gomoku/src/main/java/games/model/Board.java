@@ -97,7 +97,7 @@ public class Board {
     public int validateDegree135(Player player) {
         int maxCombo = 0;
         // j = 0
-        for(int i = 0; i < boardSize; i++){
+        for(int i = 0; i < boardSize-1; i++){
             int cnt = 0;
             for(int k = 0; k <= i; k++){
                 if(board[i-k][k].getFiller().charAt(0) == player.getName().charAt(0)){
@@ -283,7 +283,7 @@ public class Board {
         int maxCombo = 0;
         // j = 0
         boolean writeMapFlag = false;
-        for(int i = 0; i < boardSize; i++){
+        for(int i = 0; i < boardSize-1; i++){
             int cnt = 0;
             for(int k = 0; k <= i; k++){
                 if(board[i-k][k].getFiller().charAt(0) == player.getName().charAt(0)){

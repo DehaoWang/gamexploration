@@ -5,10 +5,7 @@ import games.model.Game;
 import games.model.Location;
 import games.model.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangdehao on 18/1/19.
@@ -42,17 +39,29 @@ public class Lv2StrategyMoveAI extends AI{
 //        evaluateGameForPlayer(game, movePlayer);
 
         List<Location> possibleMoves = moveGenerator(game.getBoard());
-        int center = (game.getBoard().getBoardSize() - 1) / 2;
-        System.out.println("center="+center);
-        Location bestMove = new Location(center,center);
+        Board board = game.getBoard();
+        int center = (board.getBoardSize() - 1) / 2;
+        // init bestMove in center 3*3
+        Location bestMove;
+        if(board.getSpace(center, center).isAvailable()){
+            bestMove = new Location(center,center);
+        }
+        else {
+            Random random = new Random();
+            int x = center - 1 + Math.abs(random.nextInt()) % 3;
+            int y = center - 1 + Math.abs(random.nextInt()) % 3;
+            bestMove = new Location(x, y);
+        }
+
         int bestScore = COMBO_2_VALUE.get(ONE_MOVE) * NUM_OF_DIRECTIONS;
+        System.out.println("possible move count = " + possibleMoves.size());
         for(Location possibleMove: possibleMoves){
             // move
             game.makeMove(possibleMove, movePlayer);
             
             // evaluation
             int selfScore = evaluateGameForPlayerV2(game.getBoard(), movePlayer);
-//            System.out.println("possibleMove="+possibleMove.toString());
+            System.out.println("possibleMove="+possibleMove.toString());
             System.out.println("score="+selfScore);
 
             // maximize oneself:    generate possible moves, select one that maximizes oneself
@@ -97,6 +106,11 @@ public class Lv2StrategyMoveAI extends AI{
         Map<Integer, Integer> mapA45 = board.validateDegree45v2(player);
         Map<Integer, Integer> mapA90 = board.validateDegree90v2(player);
         Map<Integer, Integer> mapA135 = board.validateDegree135v2(player);
+
+        System.out.println("a0="+mapA0);
+        System.out.println("a45="+mapA45);
+        System.out.println("a90="+mapA90);
+        System.out.println("a135="+mapA135);
 
         int total =
                 calScoreByMap(mapA0)
