@@ -159,7 +159,7 @@ public class Lv2StrategyMoveAI extends AI{
     }
 
     public List<Location> moveGenerator(Board board){
-        List<Location> possibleMoves = new ArrayList<>();
+        List<Location> possibleMoves = new ArrayList<Location>();
 
         for(int i = 0; i < board.getBoardSize(); i++){
             for(int j = 0; j < board.getBoardSize(); j++){

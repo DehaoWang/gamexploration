@@ -185,7 +185,7 @@ public class Board {
 
 
     public Map<String, Integer> validateDegree0v2(Player player) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<String, Integer>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
@@ -226,7 +226,7 @@ public class Board {
 
 
     public Map<String,Integer> validateDegree45v2(Player player) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<String, Integer>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
@@ -272,7 +272,7 @@ public class Board {
     }
 
     public Map<String,Integer> validateDegree90v2(Player player) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<String, Integer>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
@@ -312,7 +312,7 @@ public class Board {
     }
 
     public Map<String,Integer> validateDegree135v2(Player player) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<String, Integer>();
 
         int maxCombo = 0;
         boolean writeMapFlag = false;
