@@ -5,4 +5,12 @@ package com.games.app.model;
  */
 public class Passenger {
     private SiteType siteType;
+
+    public SiteType getSiteType() {
+        return siteType;
+    }
+
+    public void setSiteType(SiteType siteType) {
+        this.siteType = siteType;
+    }
 }

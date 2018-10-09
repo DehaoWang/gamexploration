@@ -1,6 +1,8 @@
 package com.games.app.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -9,6 +11,7 @@ import java.util.Set;
 // composited by Site
 public class CityMap {
 
+    private int siteNum = 0;
     private static final int WIDTH_PARAM = 3;
     private static final int HEIGHT_PARAM = 1;
     private Site[][] sites;
@@ -16,6 +19,8 @@ public class CityMap {
     private final String BLANK = " ";
     private int zoom = 1;
     private Set<Integer> siteTypeSet;
+
+    Map<Integer, Integer> siteId2Position = new HashMap<Integer, Integer>();
 
     public CityMap(int len, int zoom) {
         this.len = len;
@@ -66,7 +71,23 @@ public class CityMap {
     }
 
     public void createSite(int x, int y, Site site) {
-        sites[x][y]
-        sites[x][y] = site;
+        if(!sites[x][y].isOccupied()){
+            sites[x][y] = site;
+            site.setOccupied(true);
+            siteNum++;
+            siteId2Position.put(site.getSiteId(), x * len + y);
+        }
+    }
+
+    public void dashboard() {
+        System.out.println(String.format("Site Num = %d", siteNum));
+
+    }
+
+    public void addPassengerToSite(Passenger passenger, int siteId) {
+        Integer p = siteId2Position.get(siteId);
+        int x = p / len;
+        int y = p % len;
+        sites[x][y].addPassenger(passenger);
     }
 }

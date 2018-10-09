@@ -17,12 +17,9 @@ public class App {
         Thread gsThread = new Thread(generatorService);
         gsThread.start();
 
-//        ViewService viewService = new ViewService(cityMap);
-//        Thread vsThread = new Thread(viewService);
-//        vsThread.start();
-
         while (true){
             cityMap.view();
+            cityMap.dashboard();
             Thread.sleep(300);
         }
     }
