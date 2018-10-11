@@ -34,15 +34,20 @@ public class GeneratorService implements Runnable {
     }
 
     public void generatePassenger() {
-        Passenger passenger = new Passenger();
-        // assign to a site
         Random random = new Random();
         int toSiteId = random.nextInt(siteId + 1);
+
+        int s = SiteTypeUtil.getSiteTypeSize();
+        int t = random.nextInt(s);
+        SiteType siteType = SiteTypeUtil.getType(t);
+
+        Passenger passenger = new Passenger(siteType);
+        // assign to a site
         cityMap.addPassengerToSite(passenger, siteId);
     }
 
     public void generateTrain() {
-        Train train = new Train(TrainConstants.DEF_CAPACITY);
+        Train train = new Train();
 
     }
 

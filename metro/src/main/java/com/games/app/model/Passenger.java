@@ -13,4 +13,8 @@ public class Passenger {
     public void setSiteType(SiteType siteType) {
         this.siteType = siteType;
     }
+
+    public Passenger(SiteType siteType) {
+        this.siteType = siteType;
+    }
 }

@@ -15,6 +15,13 @@ public class SiteType {
         initial = type.charAt(0);
     }
 
+    @Override
+    public String toString() {
+        return "SiteType{" +
+                "type='" + type + '\'' +
+                '}';
+    }
+
     public SiteType() {
         type = DEF_SHAPE;
         initial = DEF_INITIAL;

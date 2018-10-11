@@ -71,7 +71,7 @@ public class CityMap {
     }
 
     public void createSite(int x, int y, Site site) {
-        if(!sites[x][y].isOccupied()){
+        if (!sites[x][y].isOccupied()) {
             sites[x][y] = site;
             site.setOccupied(true);
             siteNum++;
@@ -81,13 +81,42 @@ public class CityMap {
 
     public void dashboard() {
         System.out.println(String.format("Site Num = %d", siteNum));
-
+        for (int i = 0; i < siteNum; i++) {
+            int pos = siteId2Position.get(i);
+            int x = pos / len;
+            int y = pos % len;
+            String siteInfo = sites[x][y].getSiteInfo();
+            System.out.println(siteInfo);
+        }
     }
 
     public void addPassengerToSite(Passenger passenger, int siteId) {
-        Integer p = siteId2Position.get(siteId);
-        int x = p / len;
-        int y = p % len;
+        Integer pos = siteId2Position.get(siteId);
+        int x = pos / len;
+        int y = pos % len;
         sites[x][y].addPassenger(passenger);
+    }
+
+    public void createSiteMan(int x, int y, String s) {
+        Site site = new Site(x, y, new SiteType(s));
+        site.setSiteId(siteNum);
+        if (!sites[x][y].isOccupied()) {
+            sites[x][y] = site;
+            site.setOccupied(true);
+            siteNum++;
+            siteId2Position.put(site.getSiteId(), x * len + y);
+        }
+    }
+
+    public void createSiteMan(Site site) {
+        site.setSiteId(siteNum);
+        int x = site.getX();
+        int y = site.getY();
+        if (!sites[x][y].isOccupied()) {
+            sites[x][y] = site;
+            site.setOccupied(true);
+            siteNum++;
+            siteId2Position.put(site.getSiteId(), x * len + y);
+        }
     }
 }
